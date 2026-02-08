@@ -1,0 +1,18 @@
+/**
+ * Countdown Block – Editor Styles
+ *
+ * Styles applied only in the block editor for the countdown block.
+ *
+ * @package Mudrava\ComingSoon
+ * @since   1.0.0
+ */
+
+.wp-block-mudrava-countdown {
+
+    &__placeholder {
+        text-align: center;
+        opacity: 0.6;
+        font-style: italic;
+        padding: 2rem;
+    }
+}

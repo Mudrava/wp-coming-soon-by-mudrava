@@ -1,0 +1,180 @@
+/**
+ * Settings App – Styles
+ *
+ * Styles for the Coming Soon plugin settings interface.
+ *
+ * @package Mudrava\ComingSoon
+ * @since   1.0.0
+ */
+
+.mudrava-cs-settings {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 24px;
+    background: #fff;
+    border: 1px solid #c3c4c7;
+    border-radius: 4px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
+
+    &__header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 24px;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    &__header-left {
+        display: flex;
+        align-items: baseline;
+        gap: 12px;
+
+        h1 {
+            margin: 0;
+            font-size: 23px;
+            font-weight: 400;
+            line-height: 1.3;
+        }
+    }
+
+    &__version {
+        color: #757575;
+        font-size: 13px;
+    }
+
+    &__header-right {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    &__tab-content {
+        margin-top: 16px;
+
+        .components-panel__body {
+            margin-bottom: 0;
+            border: none;
+            border-bottom: 1px solid #e0e0e0;
+            border-radius: 0;
+
+            &:last-child {
+                border-bottom: none;
+            }
+        }
+
+        /* Align content with toggle text when panel is open */
+        .components-panel__body.is-opened {
+            padding: 0 16px 16px;
+
+            > .components-panel__body-title {
+                margin: 0 -16px 12px;
+            }
+        }
+    }
+
+    &__color-input {
+        margin-bottom: 16px;
+
+        .components-base-control__label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 11px;
+            letter-spacing: 0.04em;
+        }
+
+        .components-base-control {
+            margin-bottom: 0;
+            flex: 1;
+        }
+    }
+
+    &__color-swatch {
+        width: 36px;
+        height: 36px;
+        min-width: 36px;
+        padding: 0;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        cursor: pointer;
+        background: none;
+
+        &::-webkit-color-swatch-wrapper {
+            padding: 2px;
+        }
+
+        &::-webkit-color-swatch {
+            border: none;
+            border-radius: 2px;
+        }
+    }
+
+    &__launch-date {
+        padding-top: 4px;
+
+        .components-base-control {
+            margin-bottom: 8px;
+        }
+
+        input[type="datetime-local"] {
+            width: 100%;
+            max-width: 280px;
+        }
+    }
+
+    &__retry-row {
+        display: grid;
+        grid-template-columns: 1fr 140px;
+        gap: 8px;
+        align-items: start;
+
+        .components-base-control {
+            margin-bottom: 0;
+        }
+    }
+
+    &__bg-options {
+        margin-top: 16px;
+        padding-top: 16px;
+        border-top: 1px solid #e0e0e0;
+    }
+
+    &__social-row {
+        display: grid;
+        grid-template-columns: 150px 1fr 1fr auto;
+        gap: 8px;
+        align-items: start;
+        margin-bottom: 12px;
+
+        .components-base-control {
+            margin-bottom: 0;
+        }
+
+        @media (max-width: 782px) {
+            grid-template-columns: 1fr 1fr;
+
+            &:last-of-type {
+                margin-bottom: 16px;
+            }
+        }
+    }
+
+    &__code-editor {
+        textarea {
+            font-family: monospace;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+    }
+
+    /* Snackbar positioning */
+    .components-snackbar-list {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 100000;
+    }
+}

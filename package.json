@@ -1,0 +1,17 @@
+{
+	"name": "wp-coming-soon-by-mudrava",
+	"version": "1.0.0",
+	"description": "Coming Soon & Maintenance Mode plugin for WordPress by Mudrava.",
+	"author": "Mudrava",
+	"license": "GPL-2.0-or-later",
+	"private": true,
+	"scripts": {
+		"build": "wp-scripts build",
+		"start": "wp-scripts start",
+		"lint:js": "wp-scripts lint-js src/",
+		"lint:css": "wp-scripts lint-style src/"
+	},
+	"devDependencies": {
+		"@wordpress/scripts": "^30.0.0"
+	}
+}
