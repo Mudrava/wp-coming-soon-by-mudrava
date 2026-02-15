@@ -16,7 +16,7 @@ import {
     Button,
     ExternalLink,
 } from '@wordpress/components';
-import { useState } from '@wordpress/element';
+import { useState, useMemo, useCallback, useRef } from '@wordpress/element';
 import { FormTokenField } from '@wordpress/components';
 
 export default function AccessTab({ settings, updateSetting }) {
@@ -24,8 +24,25 @@ export default function AccessTab({ settings, updateSetting }) {
     const { previewUrl = '' } = window.mudravaComingSoon || {};
 
     const [copied, setCopied] = useState(false);
+    const inputRef = useRef(null);
 
     const bypassRoles = settings.bypass_roles || [];
+
+    /**
+     * Build the full preview URL dynamically so it always reflects the
+     * current token value (including after regeneration).
+     */
+    const currentPreviewUrl = useMemo(() => {
+        const token = settings.preview_token || '';
+        if (!token) return '';
+        try {
+            const url = new URL(previewUrl || window.location.origin);
+            url.searchParams.set('mudrava_preview', token);
+            return url.toString();
+        } catch {
+            return previewUrl;
+        }
+    }, [settings.preview_token, previewUrl]);
 
     const handleRoleToggle = (role, checked) => {
         const updated = checked
@@ -34,11 +51,37 @@ export default function AccessTab({ settings, updateSetting }) {
         updateSetting('bypass_roles', updated);
     };
 
-    const handleCopyPreview = () => {
-        navigator.clipboard.writeText(previewUrl).then(() => {
+    const handleCopyPreview = useCallback(() => {
+        if (!currentPreviewUrl) return;
+
+        /* Try modern Clipboard API first, fall back to execCommand. */
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(currentPreviewUrl).then(() => {
+                setCopied(true);
+                setTimeout(() => setCopied(false), 2000);
+            }).catch(() => {
+                fallbackCopy(currentPreviewUrl);
+            });
+        } else {
+            fallbackCopy(currentPreviewUrl);
+        }
+    }, [currentPreviewUrl]);
+
+    const fallbackCopy = (text) => {
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        textarea.style.position = 'fixed';
+        textarea.style.opacity = '0';
+        document.body.appendChild(textarea);
+        textarea.select();
+        try {
+            document.execCommand('copy');
             setCopied(true);
             setTimeout(() => setCopied(false), 2000);
-        });
+        } catch {
+            /* Silent fail — unlikely in admin context. */
+        }
+        document.body.removeChild(textarea);
     };
 
     const handleRegenerateToken = () => {
@@ -81,12 +124,14 @@ export default function AccessTab({ settings, updateSetting }) {
 
             <PanelBody title={__('Preview Link', 'wp-coming-soon-by-mudrava')} initialOpen={false}>
                 <p className="components-base-control__help" style={{ marginTop: 0 }}>
-                    {__('Share this link to let someone preview the Coming Soon page without logging in.', 'wp-coming-soon-by-mudrava')}
+                    {__('Share this link to let someone preview the site without logging in.', 'wp-coming-soon-by-mudrava')}
                 </p>
                 <TextControl
-                    value={settings.preview_token || ''}
+                    ref={inputRef}
+                    value={currentPreviewUrl}
                     readOnly
-                    label={__('Preview Token', 'wp-coming-soon-by-mudrava')}
+                    label={__('Preview URL', 'wp-coming-soon-by-mudrava')}
+                    onFocus={(e) => e.target.select()}
                 />
                 <div style={{ display: 'flex', gap: '8px', marginTop: '8px' }}>
                     <Button
