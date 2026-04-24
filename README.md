@@ -145,4 +145,4 @@ GPL-2.0-or-later
 
 ## Credits
 
-Built by [Mudrava](https://mudrava.com).
+Built by [Mudrava](https://mudrava.com/en/).
